@@ -16,8 +16,12 @@ class Solution(object):
         for left in range(s_len):
             right = s_len - 1
             while right >= left:
-                if is_palindrome(s[left:right+1]):
+                if s[left] != s[right]:
+                    right -= 1
+                    continue
+                elif is_palindrome(s[left:right+1]):
                     result_dict[len(s[left:right+1])] = s[left:right+1]
+
                 right -= 1
 
         return result_dict[max(result_dict)]
