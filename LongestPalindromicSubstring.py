@@ -4,38 +4,52 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
-        result_dict = {}
         s_len = len(s)
+        if s_len == 1:
+            return s
 
-        max_len = -1
-        for left in range(s_len):
-            right = s_len - 1
-            if result_dict:
-                max_len = max(result_dict)
+        max_len = 0
+        center = 0
 
-            while right >= left and right - left > max_len:
-                if s[left] != s[right]:
-                    right -= 1
-                    continue
-
-                tmp_left = left
-                tmp_right = right
-                while s[tmp_left] == s[tmp_right]:
-                    tmp_left += 1
-                    tmp_right -= 1
-                    if tmp_left >= tmp_right:
-                        result_dict[right - left] = (left, right)
+        while center < s_len - 1:
+            if s[center] == s[center+1]: # test even
+                left = center - 1
+                right = center + 2
+                while left >= 0 and right < s_len:
+                    if s[left] == s[right]:
+                        left -= 1
+                        right += 1
+                    else:
                         break
 
-                right -= 1
+                if right - left > max_len:
+                    max_len = right - left
+                    best_range = (left+1, right-1)
 
-        left, right = result_dict[max(result_dict)]
+            left = center - 1
+            right = center + 1
+            while left >= 0 and right < s_len:
+                if s[left] == s[right]:
+                    left -= 1
+                    right += 1
+                else:
+                    break
+
+            if right - left > max_len:
+                max_len = right - left
+                best_range = (left+1, right-1)
+
+            center += 1
+
+        left, right = best_range
         return s[left:right+1]
-
 
 solution = Solution()
 print(solution.longestPalindrome("babad"))
 print(solution.longestPalindrome("cbbd"))
 print(solution.longestPalindrome("a"))
 print(solution.longestPalindrome("ab"))
+print(solution.longestPalindrome("bb"))
+print(solution.longestPalindrome("ccc"))
+print(solution.longestPalindrome("ccd"))
 print(solution.longestPalindrome("reifadyqgztixemwswtccodfnchcovrmiooffbbijkecuvlvukecutasfxqcqygltrogrdxlrslbnzktlanycgtniprjlospzhhgdrqcwlukbpsrumxguskubokxcmswjnssbkutdhppsdckuckcbwbxpmcmdicfjxaanoxndlfpqwneytatcbyjmimyawevmgirunvmdvxwdjbiqszwhfhjmrpexfwrbzkipxfowcbqjckaotmmgkrbjvhihgwuszdrdiijkgjoljjdubcbowvxslctleblfmdzmvdkqdxtiylabrwaccikkpnpsgcotxoggdydqnuogmxttcycjorzrtwtcchxrbbknfmxnonbhgbjjypqhbftceduxgrnaswtbytrhuiqnxkivevhprcvhggugrmmxolvfzwadlnzdwbtqbaveoongezoymdrhywxcxvggsewsxckucmncbrljskgsgtehortuvbtrsfisyewchxlmxqccoplhlzwutoqoctgfnrzhqctxaqacmirrqdwsbdpqttmyrmxxawgtjzqjgffqwlxqxwxrkgtzqkgdulbxmfcvxcwoswystiyittdjaqvaijwscqobqlhskhvoktksvmguzfankdigqlegrxxqpoitdtykfltohnzrcgmlnhddcfmawiriiiblwrttveedkxzzagdzpwvriuctvtrvdpqzcdnrkgcnpwjlraaaaskgguxzljktqvzzmruqqslutiipladbcxdwxhmvevsjrdkhdpxcyjkidkoznuagshnvccnkyeflpyjzlcbmhbytxnfzcrnmkyknbmtzwtaceajmnuyjblmdlbjdjxctvqcoqkbaszvrqvjgzdqpvmucerumskjrwhywjkwgligkectzboqbanrsvynxscpxqxtqhthdytfvhzjdcxgckvgfbldsfzxqdozxicrwqyprgnadfxsionkzzegmeynye"))
