@@ -4,27 +4,33 @@ class Solution(object):
         :type s: str
         :rtype: str
         """
-        def is_palindrome(s1):
-            if s1 == s1[::-1]:
-                return True
-            else:
-                return False
-
         result_dict = {}
-
         s_len = len(s)
+
+        max_len = -1
         for left in range(s_len):
             right = s_len - 1
-            while right >= left:
+            if result_dict:
+                max_len = max(result_dict)
+
+            while right >= left and right - left > max_len:
                 if s[left] != s[right]:
                     right -= 1
                     continue
-                elif is_palindrome(s[left:right+1]):
-                    result_dict[len(s[left:right+1])] = s[left:right+1]
+
+                tmp_left = left
+                tmp_right = right
+                while s[tmp_left] == s[tmp_right]:
+                    tmp_left += 1
+                    tmp_right -= 1
+                    if tmp_left >= tmp_right:
+                        result_dict[right - left] = (left, right)
+                        break
 
                 right -= 1
 
-        return result_dict[max(result_dict)]
+        left, right = result_dict[max(result_dict)]
+        return s[left:right+1]
 
 
 solution = Solution()
